@@ -27,7 +27,6 @@ export const Modal = ({ children, open, onOpenChange }: ModalProps) => {
 				<Button className='bg-dark absolute top-2 right-2' onClick={() => onOpenChange(false)}>
 					<X className='text-light' />
 				</Button>
-
 				{children}
 			</div>
 		</div>,

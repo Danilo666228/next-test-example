@@ -66,13 +66,13 @@ export const ProductList = () => {
 
 	return (
 		<section>
-			<div className='mx-[300px] my-[105px] grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-[20px]'>
+			<div className='my-[105px] grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-[20px]'>
 				{products.map(product => (
 					<ProductCard key={product.id} product={product} />
 				))}
 			</div>
 			{isLoading && (
-				<div className='mx-[300px] flex flex-col items-center justify-center gap-3'>
+				<div className='flex flex-col items-center justify-center gap-3'>
 					<Loader2 size={42} className='animate-spin' />
 					<Typography tag='h2'>Загрузка...</Typography>
 				</div>

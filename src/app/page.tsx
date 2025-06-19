@@ -1,8 +1,6 @@
-import { ReviewCard } from '@/components/shared'
-
 import { Review } from '@/shared/api/types'
 
-import { Header, ProductList } from './(components)'
+import { Cart, Header, ProductList, ReviewList } from './(components)'
 
 async function getReviews() {
 	const response = await fetch('http://o-complex.com:1337/reviews')
@@ -17,13 +15,11 @@ export default async function Home() {
 	return (
 		<>
 			<Header />
-			<div className='mx-[300px] my-[105px] flex justify-center gap-[20px]'>
-				{reviews.map(review => (
-					<ReviewCard key={review.id} review={review} />
-				))}
+			<div className='mx-[300px]'>
+				<ReviewList reviews={reviews} />
+				<Cart />
+				<ProductList />
 			</div>
-
-			<ProductList />
 		</>
 	)
 }

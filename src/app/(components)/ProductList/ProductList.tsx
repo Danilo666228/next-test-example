@@ -21,48 +21,56 @@ export const ProductList = () => {
 	const loadMoreRef = useRef<HTMLDivElement>(null)
 	const [hasMore, setHasMore] = useState(true)
 	const [isLoading, setIsLoading] = useState(false)
+	const [isInitialized, setIsInitialized] = useState(false)
 
 	const loadMoreProducts = useCallback(async () => {
 		if (isLoading || !hasMore) return
 		setIsLoading(true)
-		fetch(`http://o-complex.com:1337/products?page=${page}&page_size=20`)
-			.then(res => res.json() as Promise<ProductResponse>)
-			.then(data => {
-				setProducts(prev => [...prev, ...data.items])
-				setPage(prev => prev + 1)
-				if (data.items.length === 0) {
-					setHasMore(false)
-				}
-			})
-			.catch(err => {
-				setIsLoading(false)
-				console.error(err)
-			})
-			.finally(() => {
-				setIsLoading(false)
-			})
+
+		try {
+			const response = await fetch(`http://o-complex.com:1337/products?page=${page}&page_size=20`)
+			const data: ProductResponse = await response.json()
+
+			setProducts(prev => [...prev, ...data.items])
+			setPage(prev => prev + 1)
+
+			if (data.items.length < 20 || data.page >= Math.ceil(data.total / 20)) {
+				setHasMore(false)
+			}
+		} catch (err) {
+			console.error('Ошибка загрузки товаров:', err)
+		} finally {
+			setIsLoading(false)
+		}
 	}, [page, hasMore, isLoading])
 
 	useEffect(() => {
-		loadMoreProducts()
-	}, [])
+		if (!isInitialized) {
+			setIsInitialized(true)
+			loadMoreProducts()
+		}
+	}, [isInitialized, loadMoreProducts])
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			entries => {
-				if (entries[0].isIntersecting && hasMore && !isLoading) {
+				if (entries[0].isIntersecting && hasMore && !isLoading && isInitialized) {
 					loadMoreProducts()
 				}
 			},
 			{
-				threshold: 0.1
+				threshold: 0.1,
+				rootMargin: '100px'
 			}
 		)
-		if (loadMoreRef.current) {
-			observer.observe(loadMoreRef.current)
+
+		const currentRef = loadMoreRef.current
+		if (currentRef) {
+			observer.observe(currentRef)
 		}
+
 		return () => observer.disconnect()
-	}, [hasMore, isLoading, loadMoreProducts])
+	}, [hasMore, isLoading, loadMoreProducts, isInitialized])
 
 	return (
 		<section>
@@ -77,7 +85,7 @@ export const ProductList = () => {
 					<Typography tag='h2'>Загрузка...</Typography>
 				</div>
 			)}
-			{hasMore && <div ref={loadMoreRef} className='h-[100px]' />}
+			{hasMore && !isLoading && <div ref={loadMoreRef} className='h-[100px]' />}
 		</section>
 	)
 }

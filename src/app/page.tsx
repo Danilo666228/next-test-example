@@ -1,3 +1,5 @@
+import { UpScroll } from '@/components/ui/UpScroll'
+
 import { Review } from '@/shared/api/types'
 
 import { Cart, Header, ProductList, ReviewList } from './(components)'
@@ -15,11 +17,12 @@ export default async function Home() {
 	return (
 		<>
 			<Header />
-			<div className='mx-[300px]'>
+			<div className='mx-auto max-w-[1440px]'>
 				<ReviewList reviews={reviews} />
 				<Cart />
 				<ProductList />
 			</div>
+			<UpScroll />
 		</>
 	)
 }

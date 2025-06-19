@@ -36,8 +36,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
 	return (
 		<article className='bg-light flex flex-col rounded-[15px] p-[20px]'>
-			<div className='relative h-[200px] w-[280px] rounded-[15px]'>
-				<img src={product.image_url} alt={product.title} className='object-cover' />
+			<div className='h-full w-full'>
+				<div className='relative w-fit overflow-hidden rounded-[15px]'>
+					<img src={product.image_url} alt={product.title} className='h-full w-full object-cover' />
+				</div>
 			</div>
 			<div className='text-dark mt-[10px]'>
 				<Typography className='truncate'>{product.title}</Typography>

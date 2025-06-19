@@ -1,15 +1,8 @@
-import { ProductCard, ReviewCard } from '@/components/shared'
+import { ReviewCard } from '@/components/shared'
 
-import { Product, Review } from '@/shared/api/types'
+import { Review } from '@/shared/api/types'
 
-import { Header } from './(components)'
-
-type ProductResponse = {
-	page: number
-	amount: number
-	total: number
-	items: Product[]
-}
+import { Header, ProductList } from './(components)'
 
 async function getReviews() {
 	const response = await fetch('http://o-complex.com:1337/reviews')
@@ -18,16 +11,8 @@ async function getReviews() {
 	return data
 }
 
-async function getProducts() {
-	const response = await fetch('http://o-complex.com:1337/products?page=1&page_size=20')
-	const data = (await response.json()) as ProductResponse
-
-	return data
-}
-
 export default async function Home() {
 	const reviews = await getReviews()
-	const products = await getProducts()
 
 	return (
 		<>
@@ -38,11 +23,7 @@ export default async function Home() {
 				))}
 			</div>
 
-			<div className='mx-[300px] my-[105px] grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-[20px]'>
-				{products.items.map(product => (
-					<ProductCard key={product.id} product={product} />
-				))}
-			</div>
+			<ProductList />
 		</>
 	)
 }

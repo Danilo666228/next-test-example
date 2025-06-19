@@ -6,9 +6,7 @@ export const Cart = () => {
 			<div>
 				<Typography>Добавленные товары</Typography>
 			</div>
-			<div>
-				
-			</div>
+			<div></div>
 			<div></div>
 		</div>
 	)
